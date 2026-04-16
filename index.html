@@ -526,54 +526,65 @@
       <p class="section-desc">Hear from those who have trusted NUVI Engineering to bring their projects to life.</p>
     </div>
 
-    <div class="testi-grid">
-      <div class="testi-card fade-up">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">
-          <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-        </div>
-        <p>NUVI Engineering completed our project with great attention to detail and professionalism. Their team was responsive and delivered exactly what we envisioned.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">C</div>
-          <div>
-            <div class="testi-name">Satisfied Client</div>
-            <div class="testi-loc"><i class="fa fa-map-marker-alt" style="color:var(--gold);font-size:0.65rem;margin-right:4px;"></i>Colombo</div>
-          </div>
-        </div>
-      </div>
+    <div class="testi-slider">
+      <div class="testi-slides" id="testiSlides"></div>
 
-      <div class="testi-card fade-up">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">
-          <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-        </div>
-        <p>Reliable and trustworthy construction partner. Highly recommended. They kept us informed at every stage and the quality of work exceeded our expectations.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">K</div>
-          <div>
-            <div class="testi-name">Happy Homeowner</div>
-            <div class="testi-loc"><i class="fa fa-map-marker-alt" style="color:var(--gold);font-size:0.65rem;margin-right:4px;"></i>Kottawa</div>
-          </div>
-        </div>
+      <div class="team-nav" style="margin-top:40px;">
+        <button class="team-btn" id="testiPrev"><i class="fa fa-chevron-left"></i></button>
+        <div class="team-dots" id="testiDots"></div>
+        <button class="team-btn" id="testiNext"><i class="fa fa-chevron-right"></i></button>
       </div>
+    </div>
 
-      <div class="testi-card fade-up">
-        <div class="testi-quote">"</div>
-        <div class="testi-stars">
-          <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-        </div>
-        <p>Excellent workmanship and on-time delivery. The NUVI team was professional throughout the entire project. I would not hesitate to work with them again.</p>
-        <div class="testi-author">
-          <div class="testi-avatar">M</div>
-          <div>
-            <div class="testi-name">Property Owner</div>
-            <div class="testi-loc"><i class="fa fa-map-marker-alt" style="color:var(--gold);font-size:0.65rem;margin-right:4px;"></i>Maharagama</div>
-          </div>
-        </div>
-      </div>
+    <div style="text-align:center; margin-top:48px;">
+      <button class="btn-primary" id="openReviewModal">
+        <i class="fa fa-pen"></i> Share Your Experience
+      </button>
     </div>
   </div>
 </section>
+
+<!-- ======================== REVIEW MODAL ======================== -->
+<div class="review-modal-overlay" id="reviewModal">
+  <div class="review-modal">
+    <button class="review-modal-close" id="closeReviewModal"><i class="fa fa-times"></i></button>
+    <div class="review-modal-header">
+      <div class="section-tag" style="justify-content:center;">Client Review</div>
+      <h3 class="review-modal-title">Share Your <span>Experience</span></h3>
+      <div class="gold-line" style="margin:16px auto 0;"></div>
+    </div>
+    <form id="reviewForm" novalidate>
+      <div class="review-form-row">
+        <div class="review-form-group">
+          <label class="review-label">Your Name</label>
+          <input class="review-input" type="text" id="reviewName" placeholder="e.g. Kamal Perera" required>
+        </div>
+        <div class="review-form-group">
+          <label class="review-label">Location</label>
+          <input class="review-input" type="text" id="reviewLocation" placeholder="e.g. Colombo" required>
+        </div>
+      </div>
+      <div class="review-form-group">
+        <label class="review-label">Rating</label>
+        <div class="star-rating" id="starRating">
+          <i class="fa fa-star" data-value="1"></i>
+          <i class="fa fa-star" data-value="2"></i>
+          <i class="fa fa-star" data-value="3"></i>
+          <i class="fa fa-star" data-value="4"></i>
+          <i class="fa fa-star" data-value="5"></i>
+        </div>
+      </div>
+      <div class="review-form-group">
+        <label class="review-label">Your Review</label>
+        <textarea class="review-input review-textarea" id="reviewText" placeholder="Tell others about your experience with NUVI Engineering..." required></textarea>
+      </div>
+      <p class="review-error" id="reviewError"></p>
+      <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+        <i class="fa fa-paper-plane"></i> Submit Review
+      </button>
+    </form>
+  </div>
+</div>
 
 <!-- ======================== FUTURE GOALS ======================== -->
 <section id="goals">
@@ -812,6 +823,22 @@
 </a>
 
 <!-- ======================== JAVASCRIPT ======================== -->
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYUlxMIvBbdUqTE1M2KspmMVxQ_JjkQZU",
+    authDomain: "nuvi-engineering-web-app.firebaseapp.com",
+    projectId: "nuvi-engineering-web-app",
+    storageBucket: "nuvi-engineering-web-app.firebasestorage.app",
+    messagingSenderId: "101892391493",
+    appId: "1:101892391493:web:8cbbd1413ff18dae6e192c",
+    measurementId: "G-TERD5ZGWRS"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+</script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
